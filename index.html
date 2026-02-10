@@ -1,39 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio Práctico de Metas - El Arte de Pedir</title>
+    <meta name="description"
+        content="Diseñado para ayudarte a pedir con intención, actuar con disciplina y confiar en el proceso.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,400;1,700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes floatSlow {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .animate-slideInRight {
+            animation: slideInRight 0.6s ease-out both;
+        }
+
+        .animate-zoomIn {
+            animation: zoomIn 0.7s ease-out both;
+        }
+
+        .animate-floatSlow {
+            animation: floatSlow 3s ease-in-out infinite;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .no-print,
+            button,
+            .fixed,
+            .progress-dots {
+                display: none !important;
+            }
+
+            #root>div {
+                background: white !important;
+                padding: 0 !important;
+            }
+
+            main {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+            }
+
+            .print-logo {
+                display: block !important;
+            }
+
+            .print-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .print-header {
+                text-align: center;
+                margin-bottom: 30px;
+                border-bottom: 3px solid #4f46e5;
+                padding-bottom: 15px;
+            }
+
+            .print-header img {
+                width: 80px;
+                height: auto;
+                margin: 0 auto 10px auto;
+            }
+
+            .print-header h1 {
+                font-size: 24pt !important;
+                color: #1e1b4b !important;
+            }
+
+            .print-summary {
+                display: block !important;
+            }
+
+            .screen-only {
+                display: none !important;
+            }
+
+            h2,
+            h3 {
+                color: #1e1b4b !important;
+            }
+
+            .text-white,
+            .text-slate-200,
+            .text-slate-300,
+            .text-indigo-300,
+            .text-slate-400,
+            .text-slate-500 {
+                color: #333 !important;
+            }
+
+            input,
+            textarea {
+                border: none !important;
+                background: none !important;
+                border-bottom: 1px solid #999 !important;
+                padding: 4px 0 !important;
+                color: black !important;
+            }
+
+            label {
+                color: #555 !important;
+                font-weight: bold !important;
+                font-size: 9pt !important;
+            }
+        }
     </style>
 </head>
+
 <body class="bg-slate-950 text-slate-200">
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
-        import React, { useState, useEffect } from 'https://esm.sh/react@18.2.0?dev';
+        import React, { useState } from 'https://esm.sh/react@18.2.0?dev';
         import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client?dev';
-        import { 
-            Sparkles, 
-            Target, 
-            Heart, 
-            Zap, 
-            CheckCircle2, 
-            ChevronRight, 
-            ChevronLeft, 
-            PenTool, 
-            Waves,
-            Calendar,
-            DollarSign,
-            Briefcase,
-            Activity,
-            Flame
+        import {
+            Sparkles, Target, Heart, CheckCircle2, ChevronRight, ChevronLeft, PenTool,
+            DollarSign, Briefcase, Activity, Flame, Printer
         } from 'https://esm.sh/lucide-react@0.292.0?dev';
+
+        const LOGO_URL = 'logo.png';
 
         const App = () => {
             const [step, setStep] = useState(0);
@@ -47,10 +203,10 @@
             });
 
             const areas = [
-                { id: 'dinero', label: 'Dinero', icon: <DollarSign className="w-6 h-6" />, color: 'from-amber-400 to-orange-500' },
-                { id: 'proyecto', label: 'Proyecto / Trabajo', icon: <Briefcase className="w-6 h-6" />, color: 'from-blue-400 to-indigo-600' },
-                { id: 'salud', label: 'Salud', icon: <Activity className="w-6 h-6" />, color: 'from-emerald-400 to-teal-600' },
-                { id: 'espiritualidad', label: 'Espiritualidad', icon: <Flame className="w-6 h-6" />, color: 'from-purple-400 to-pink-600' }
+                { id: 'dinero', label: 'Dinero', icon: <DollarSign className="w-6 h-6" />, color: 'from-amber-400 to-orange-500', checkColor: 'text-amber-400' },
+                { id: 'proyecto', label: 'Proyecto / Trabajo', icon: <Briefcase className="w-6 h-6" />, color: 'from-blue-400 to-indigo-600', checkColor: 'text-blue-400' },
+                { id: 'salud', label: 'Salud', icon: <Activity className="w-6 h-6" />, color: 'from-emerald-400 to-teal-600', checkColor: 'text-emerald-400' },
+                { id: 'espiritualidad', label: 'Espiritualidad', icon: <Flame className="w-6 h-6" />, color: 'from-purple-400 to-pink-600', checkColor: 'text-purple-400' }
             ];
 
             const nextStep = () => setStep(s => s + 1);
@@ -58,303 +214,350 @@
 
             const updateField = (area, field, value) => {
                 setFormData(prev => ({
-                ...prev,
-                [area]: { ...prev[area], [field]: value }
+                    ...prev,
+                    [area]: { ...prev[area], [field]: value }
                 }));
             };
 
-            // Componentes de Pantalla
-            const WelcomeScreen = () => (
-                <div className="flex flex-col items-center text-center space-y-8 animate-in fade-in duration-1000">
-                <div className="relative">
-                    <div className="absolute inset-0 animate-pulse bg-indigo-500 blur-3xl opacity-20 rounded-full"></div>
-                    <Sparkles className="w-20 h-20 text-indigo-400 mb-4 relative" />
-                </div>
-                <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-                    Ejercicio Práctico de Metas
-                </h1>
-                <p className="text-slate-400 text-lg max-w-xl">
-                    Claridad. Fe. Acción. <br />
-                    Diseñado para ayudarte a pedir con intención, actuar con disciplina y confiar en el proceso.
-                </p>
-                <button 
-                    onClick={nextStep}
-                    className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-bold text-xl shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
-                >
-                    Comenzar Ritual <ChevronRight className="w-5 h-5" />
-                </button>
+            const filledAreas = areas.filter(a => formData[a.id].meta);
+
+            const handlePrint = () => {
+                setStep(99);
+                setTimeout(() => window.print(), 300);
+            };
+
+            // ============================================================
+            //  PRINT-ONLY: Resumen completo (visible solo al imprimir)
+            // ============================================================
+            const PrintSummary = (
+                <div className="print-summary hidden">
+                    <div className="print-header">
+                        <img src={LOGO_URL} alt="Logo" style={{ width: '80px', margin: '0 auto 10px auto', display: 'block' }} />
+                        <h1 style={{ fontSize: '24pt', fontWeight: 800, color: '#1e1b4b', margin: 0 }}>MI MAPA MÁGICO DE 90 DÍAS</h1>
+                        <p style={{ color: '#666', marginTop: '5px' }}>Ejercicio Práctico de Metas • El Arte de Pedir</p>
+                    </div>
+
+                    {areas.map(area => {
+                        const d = formData[area.id];
+                        if (!d.meta) return null;
+                        return (
+                            <div key={area.id} className="print-section" style={{ border: '1px solid #ddd', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+                                <h2 style={{ fontSize: '14pt', fontWeight: 700, color: '#1e1b4b', marginBottom: '10px', borderBottom: '2px solid #e2e8f0', paddingBottom: '6px' }}>
+                                    {area.label}: {d.meta}
+                                </h2>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '10pt' }}>
+                                    <div><strong>¿Cuánto?</strong><br />{d.cuanto || '—'}</div>
+                                    <div><strong>¿Para cuándo?</strong><br />{d.cuando || '—'}</div>
+                                    <div style={{ gridColumn: 'span 2' }}><strong>Visualización:</strong><br />{d.vision || '—'}</div>
+                                    <div><strong>Acción diaria:</strong><br />{d.diaria || '—'}</div>
+                                    <div><strong>Acción semanal:</strong><br />{d.semanal || '—'}</div>
+                                </div>
+                            </div>
+                        );
+                    })}
+
+                    <div className="print-section" style={{ border: '2px solid #4f46e5', borderRadius: '16px', padding: '20px', textAlign: 'center', marginTop: '24px' }}>
+                        <h2 style={{ fontSize: '16pt', fontWeight: 700, color: '#1e1b4b' }}>CONTRATO SAGRADO</h2>
+                        <p style={{ fontSize: '11pt', color: '#555', margin: '12px 0' }}>
+                            "Durante los próximos 90 días me comprometo a pedir claro, actuar cada día y dejar de sabotearme con dudas."
+                        </p>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', marginTop: '20px' }}>
+                            <div>
+                                <div style={{ fontSize: '8pt', color: '#888', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Firma Consciente</div>
+                                <div style={{ fontSize: '18pt', fontFamily: 'Playfair Display, serif', color: '#4f46e5', borderBottom: '2px solid #4f46e5', paddingBottom: '4px', minWidth: '180px' }}>{formData.firma || '_______________'}</div>
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '8pt', color: '#888', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Fecha</div>
+                                <div style={{ fontSize: '18pt', fontFamily: 'monospace', color: '#333' }}>{formData.fecha}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
 
-            const Step1Pide = () => (
-                <div className="space-y-8 w-full max-w-4xl animate-in slide-in-from-right duration-500">
-                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
-                    <div className="bg-indigo-500 p-2 rounded-lg text-white font-bold">1</div>
-                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">PIDE: Claridad Total</h2>
-                </div>
-                <p className="text-slate-400 italic">¿Qué quieres realmente en los próximos 90 días? Define una sola meta por área.</p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {areas.map(area => (
-                    <div key={area.id} className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500 transition-colors group">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${area.color} flex items-center justify-center text-white mb-4 shadow-lg`}>
-                        {area.icon}
-                        </div>
-                        <label className="block text-slate-300 font-medium mb-2">{area.label}</label>
-                        <input 
-                        type="text" 
-                        placeholder="Tu intención principal..."
-                        value={formData[area.id].meta}
-                        onChange={(e) => updateField(area.id, 'meta', e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                        />
-                    </div>
-                    ))}
-                </div>
-                
-                <div className="flex justify-between mt-12">
-                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
-                    <ChevronLeft className="w-5 h-5" /> Regresar
-                    </button>
-                    <button onClick={nextStep} className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
-                    Continuar <ChevronRight className="w-5 h-5" />
-                    </button>
-                </div>
-                </div>
-            );
-
-            const Step2Define = () => (
-                <div className="space-y-8 w-full max-w-4xl animate-in slide-in-from-right duration-500">
-                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
-                    <div className="bg-amber-500 p-2 rounded-lg text-white font-bold">2</div>
-                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">DEFINE: Inteligencia</h2>
-                </div>
-                <p className="text-slate-400 italic">Si no lo puedes describir, no lo puedes dirigir. Seamos específicos.</p>
-
-                <div className="space-y-12">
-                    {areas.filter(a => formData[a.id].meta).map(area => (
-                    <div key={area.id} className="bg-slate-800/30 p-8 rounded-3xl border border-slate-700 space-y-6">
-                        <div className="flex items-center gap-3">
-                        <span className={`w-10 h-10 rounded-full bg-gradient-to-br ${area.color} flex items-center justify-center text-white`}>
-                            {area.icon}
-                        </span>
-                        <h3 className="text-xl font-bold text-white">{area.label}: {formData[area.id].meta}</h3>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Cuánto exactamente?</label>
-                            <input 
-                            type="text"
-                            value={formData[area.id].cuanto}
-                            onChange={(e) => updateField(area.id, 'cuanto', e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:ring-2 focus:ring-amber-500"
-                            placeholder="Cifra o indicador de éxito..."
-                            />
-                        </div>
-                        <div>
-                            <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Para cuándo?</label>
-                            <input 
-                            type="date"
-                            value={formData[area.id].cuando}
-                            onChange={(e) => updateField(area.id, 'cuando', e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:ring-2 focus:ring-amber-500"
-                            />
-                        </div>
-                        <div className="md:col-span-2">
-                            <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Cómo se ve cuando ya es real? (Visualización)</label>
-                            <textarea 
-                            rows="3"
-                            value={formData[area.id].vision}
-                            onChange={(e) => updateField(area.id, 'vision', e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:ring-2 focus:ring-amber-500"
-                            placeholder="Describe el sentimiento, el lugar y la escena..."
-                            />
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>
-
-                <div className="flex justify-between mt-12">
-                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
-                    <ChevronLeft className="w-5 h-5" /> Regresar
-                    </button>
-                    <button onClick={nextStep} className="px-10 py-4 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
-                    Anclar Visión <ChevronRight className="w-5 h-5" />
-                    </button>
-                </div>
-                </div>
-            );
-
-            const Step3Cree = () => (
-                <div className="flex flex-col items-center text-center space-y-12 max-w-3xl animate-in zoom-in duration-700">
-                <div className="bg-purple-500/10 p-12 rounded-full border border-purple-500/20 relative">
-                    <Heart className="w-24 h-24 text-purple-400 animate-bounce" />
-                    <div className="absolute top-0 right-0 animate-ping">✨</div>
-                </div>
-                
-                <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white uppercase tracking-widest">3. CREE: Modo Niño</h2>
-                    <div className="bg-slate-800 p-8 rounded-3xl border-2 border-dashed border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
-                    <p className="text-3xl font-serif text-slate-200 italic leading-relaxed">
-                        "No sé cómo va a pasar, pero confío en que es posible y me muevo cada día."
-                    </p>
-                    </div>
-                    <p className="text-slate-400 text-lg">La fe no es pasividad. Es apertura total a lo inesperado.</p>
-                </div>
-
-                <button 
-                    onClick={nextStep}
-                    className="px-12 py-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
-                >
-                    Entro en Modo Acción
-                </button>
-                </div>
-            );
-
-            const Step4Actua = () => (
-                <div className="space-y-8 w-full max-w-4xl animate-in slide-in-from-right duration-500">
-                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
-                    <div className="bg-emerald-500 p-2 rounded-lg text-white font-bold">4</div>
-                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">ACTÚA: Modo Adulto</h2>
-                </div>
-                <p className="text-slate-400 italic">La claridad sin acción es solo intención. Define tu camino.</p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {areas.filter(a => formData[a.id].meta).map(area => (
-                    <div key={area.id} className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 space-y-4">
-                        <h3 className="font-bold text-white flex items-center gap-2">
-                        <CheckCircle2 className={`w-5 h-5 text-${area.id === 'dinero' ? 'amber' : area.id === 'salud' ? 'emerald' : area.id === 'proyecto' ? 'blue' : 'purple'}-400`} />
-                        {area.label}: {formData[area.id].meta}
-                        </h3>
-                        
-                        <div className="space-y-4">
-                        <div>
-                            <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">1 Acción diaria pequeña</label>
-                            <input 
-                            type="text"
-                            value={formData[area.id].diaria}
-                            onChange={(e) => updateField(area.id, 'diaria', e.target.value)}
-                            placeholder="Hábitos, lecturas, pequeños pasos..."
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:ring-1 focus:ring-emerald-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">1 Acción semanal incómoda</label>
-                            <input 
-                            type="text"
-                            value={formData[area.id].semanal}
-                            onChange={(e) => updateField(area.id, 'semanal', e.target.value)}
-                            placeholder="Llamadas, inversiones, decisiones difíciles..."
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:ring-1 focus:ring-emerald-500"
-                            />
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>
-
-                <div className="flex justify-between mt-12">
-                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
-                    <ChevronLeft className="w-5 h-5" /> Regresar
-                    </button>
-                    <button onClick={nextStep} className="px-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
-                    Firmar Compromiso <ChevronRight className="w-5 h-5" />
-                    </button>
-                </div>
-                </div>
-            );
-
-            const Step5Compromiso = () => (
-                <div className="w-full max-w-2xl bg-slate-900/50 border border-indigo-500/30 p-12 rounded-[2rem] shadow-2xl space-y-8 animate-in zoom-in duration-1000">
-                <div className="text-center space-y-4">
-                    <PenTool className="w-12 h-12 text-indigo-400 mx-auto" />
-                    <h2 className="text-3xl font-bold text-white">CONTRATO SAGRADO</h2>
-                    <p className="text-slate-400">Compromiso de 90 días</p>
-                </div>
-
-                <div className="space-y-6 text-lg text-slate-300 leading-relaxed text-center">
-                    <p>
-                    "Durante los próximos 90 días me comprometo a pedir claro, actuar cada día y dejar de sabotearme con dudas."
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-800">
-                    <div>
-                    <label className="text-xs text-slate-500 font-bold uppercase mb-2 block text-center">Firma Consciente</label>
-                    <input 
-                        type="text"
-                        value={formData.firma}
-                        onChange={(e) => setFormData({...formData, firma: e.target.value})}
-                        placeholder="Tu nombre completo"
-                        className="w-full bg-transparent border-b-2 border-slate-700 py-4 text-center text-2xl font-serif text-indigo-300 focus:outline-none focus:border-indigo-500 transition-colors"
-                    />
-                    </div>
-                    <div>
-                    <label className="text-xs text-slate-500 font-bold uppercase mb-2 block text-center">Fecha de Inicio</label>
-                    <div className="text-center text-2xl text-slate-200 py-4 font-mono">
-                        {formData.fecha}
-                    </div>
-                    </div>
-                </div>
-
-                <button 
-                    onClick={() => window.print()}
-                    className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg hover:bg-indigo-500 shadow-xl flex items-center justify-center gap-3 transition-all"
-                >
-                    Descargar mi Mapa Mágico <Target className="w-5 h-5" />
-                </button>
-
-                <p className="text-center text-xs text-slate-500 uppercase tracking-tighter">
-                    Has activado tu proceso de manifestación. Confía.
-                </p>
-                </div>
-            );
-
+            // ============================================================
+            //  PANTALLA PRINCIPAL (visible solo en pantalla, no al imprimir)
+            // ============================================================
             return (
                 <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-indigo-500/30 selection:text-white p-4 md:p-8 flex items-center justify-center overflow-x-hidden">
-                {/* Background Decor */}
-                <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-900/20 blur-[120px] rounded-full"></div>
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 blur-[120px] rounded-full"></div>
-                    <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                </div>
-
-                <main className="relative z-10 w-full flex flex-col items-center">
-                    {step === 0 && <WelcomeScreen />}
-                    {step === 1 && <Step1Pide />}
-                    {step === 2 && <Step2Define />}
-                    {step === 3 && <Step3Cree />}
-                    {step === 4 && <Step4Actua />}
-                    {step === 5 && <Step5Compromiso />}
-
-                    {/* Progress Dots */}
-                    {step > 0 && (
-                    <div className="mt-12 flex items-center gap-4">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                        <div 
-                            key={s} 
-                            className={`w-2 h-2 rounded-full transition-all duration-500 ${step >= s ? 'w-8 bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,1)]' : 'bg-slate-700'}`}
-                        />
-                        ))}
+                    {/* Background Decor */}
+                    <div className="fixed inset-0 overflow-hidden pointer-events-none no-print">
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-900/20 blur-[120px] rounded-full"></div>
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 blur-[120px] rounded-full"></div>
                     </div>
-                    )}
-                </main>
 
-                <style dangerouslySetInnerHTML={{ __html: `
-                    @media print {
-                    body { background: white !important; color: black !important; }
-                    .no-print, button, .fixed { display: none !important; }
-                    main { width: 100% !important; max-width: none !important; margin: 0 !important; }
-                    .bg-slate-800, .bg-slate-900, .bg-slate-950 { background: transparent !important; color: black !important; border: 1px solid #ddd !important; }
-                    .text-white, .text-slate-200, .text-slate-300, .text-indigo-300 { color: black !important; }
-                    .border-slate-700 { border-color: #eee !important; }
-                    input, textarea { border: none !important; background: none !important; border-bottom: 1px solid black !important; padding: 5px 0 !important; color: black !important; }
-                    label { color: #555 !important; font-weight: bold !important; font-size: 10pt !important; }
-                    h1, h2, h3 { color: black !important; }
-                    }
-                `}} />
+                    <main className="relative z-10 w-full flex flex-col items-center screen-only">
+
+                        {/* ===== STEP 0: Welcome ===== */}
+                        {step === 0 && (
+                            <div className="flex flex-col items-center text-center space-y-8 animate-fadeInUp">
+                                <div className="relative">
+                                    <div className="absolute inset-0 animate-pulse bg-indigo-500 blur-3xl opacity-20 rounded-full"></div>
+                                    <img src={LOGO_URL} alt="Logo" className="w-24 h-24 relative animate-floatSlow rounded-2xl" />
+                                </div>
+                                <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                                    Ejercicio Práctico de Metas
+                                </h1>
+                                <p className="text-slate-400 text-lg max-w-xl">
+                                    Claridad. Fe. Acción. <br />
+                                    Diseñado para ayudarte a pedir con intención, actuar con disciplina y confiar en el proceso.
+                                </p>
+                                <button
+                                    onClick={nextStep}
+                                    className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-bold text-xl shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+                                >
+                                    Comenzar Ritual <ChevronRight className="w-5 h-5" />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ===== STEP 1: PIDE ===== */}
+                        {step === 1 && (
+                            <div className="space-y-8 w-full max-w-4xl animate-slideInRight">
+                                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
+                                    <div className="bg-indigo-500 p-2 rounded-lg text-white font-bold">1</div>
+                                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">PIDE: Claridad Total</h2>
+                                </div>
+                                <p className="text-slate-400 italic">¿Qué quieres realmente en los próximos 90 días? Define una sola meta por área.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {areas.map(area => (
+                                        <div key={area.id} className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-indigo-500 transition-colors group">
+                                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${area.color} flex items-center justify-center text-white mb-4 shadow-lg`}>
+                                                {area.icon}
+                                            </div>
+                                            <label className="block text-slate-300 font-medium mb-2">{area.label}</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Tu intención principal..."
+                                                value={formData[area.id].meta}
+                                                onChange={(e) => updateField(area.id, 'meta', e.target.value)}
+                                                className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="flex justify-between mt-12">
+                                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
+                                        <ChevronLeft className="w-5 h-5" /> Regresar
+                                    </button>
+                                    <button onClick={nextStep} className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
+                                        Continuar <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ===== STEP 2: DEFINE ===== */}
+                        {step === 2 && (
+                            <div className="space-y-8 w-full max-w-4xl animate-slideInRight">
+                                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
+                                    <div className="bg-amber-500 p-2 rounded-lg text-white font-bold">2</div>
+                                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">DEFINE: Inteligencia</h2>
+                                </div>
+                                <p className="text-slate-400 italic">Si no lo puedes describir, no lo puedes dirigir. Seamos específicos.</p>
+
+                                <div className="space-y-12">
+                                    {filledAreas.map(area => (
+                                        <div key={area.id} className="bg-slate-800/30 p-8 rounded-3xl border border-slate-700 space-y-6">
+                                            <div className="flex items-center gap-3">
+                                                <span className={`w-10 h-10 rounded-full bg-gradient-to-br ${area.color} flex items-center justify-center text-white`}>
+                                                    {area.icon}
+                                                </span>
+                                                <h3 className="text-xl font-bold text-white">{area.label}: {formData[area.id].meta}</h3>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Cuánto exactamente?</label>
+                                                    <input
+                                                        type="text"
+                                                        value={formData[area.id].cuanto}
+                                                        onChange={(e) => updateField(area.id, 'cuanto', e.target.value)}
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        placeholder="Cifra o indicador de éxito..."
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Para cuándo?</label>
+                                                    <input
+                                                        type="date"
+                                                        value={formData[area.id].cuando}
+                                                        onChange={(e) => updateField(area.id, 'cuando', e.target.value)}
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                    />
+                                                </div>
+                                                <div className="md:col-span-2">
+                                                    <label className="text-sm text-slate-500 uppercase font-bold tracking-widest mb-2 block">¿Cómo se ve cuando ya es real? (Visualización)</label>
+                                                    <textarea
+                                                        rows="3"
+                                                        value={formData[area.id].vision}
+                                                        onChange={(e) => updateField(area.id, 'vision', e.target.value)}
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                                        placeholder="Describe el sentimiento, el lugar y la escena..."
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="flex justify-between mt-12">
+                                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
+                                        <ChevronLeft className="w-5 h-5" /> Regresar
+                                    </button>
+                                    <button onClick={nextStep} className="px-10 py-4 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
+                                        Anclar Visión <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ===== STEP 3: CREE ===== */}
+                        {step === 3 && (
+                            <div className="flex flex-col items-center text-center space-y-12 max-w-3xl animate-zoomIn">
+                                <div className="bg-purple-500/10 p-12 rounded-full border border-purple-500/20 relative">
+                                    <Heart className="w-24 h-24 text-purple-400 animate-bounce" />
+                                    <div className="absolute top-0 right-0 animate-ping">✨</div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <h2 className="text-3xl font-bold text-white uppercase tracking-widest">3. CREE: Modo Niño</h2>
+                                    <div className="bg-slate-800 p-8 rounded-3xl border-2 border-dashed border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+                                        <p className="text-3xl font-serif text-slate-200 italic leading-relaxed">
+                                            "No sé cómo va a pasar, pero confío en que es posible y me muevo cada día."
+                                        </p>
+                                    </div>
+                                    <p className="text-slate-400 text-lg">La fe no es pasividad. Es apertura total a lo inesperado.</p>
+                                </div>
+
+                                <button
+                                    onClick={nextStep}
+                                    className="px-12 py-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
+                                >
+                                    Entro en Modo Acción
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ===== STEP 4: ACTÚA ===== */}
+                        {step === 4 && (
+                            <div className="space-y-8 w-full max-w-4xl animate-slideInRight">
+                                <div className="flex items-center gap-4 border-b border-slate-700 pb-4">
+                                    <div className="bg-emerald-500 p-2 rounded-lg text-white font-bold">4</div>
+                                    <h2 className="text-3xl font-bold text-white uppercase tracking-wider">ACTÚA: Modo Adulto</h2>
+                                </div>
+                                <p className="text-slate-400 italic">La claridad sin acción es solo intención. Define tu camino.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {filledAreas.map(area => (
+                                        <div key={area.id} className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 space-y-4">
+                                            <h3 className="font-bold text-white flex items-center gap-2">
+                                                <CheckCircle2 className={`w-5 h-5 ${area.checkColor}`} />
+                                                {area.label}: {formData[area.id].meta}
+                                            </h3>
+
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">1 Acción diaria pequeña</label>
+                                                    <input
+                                                        type="text"
+                                                        value={formData[area.id].diaria}
+                                                        onChange={(e) => updateField(area.id, 'diaria', e.target.value)}
+                                                        placeholder="Hábitos, lecturas, pequeños pasos..."
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">1 Acción semanal incómoda</label>
+                                                    <input
+                                                        type="text"
+                                                        value={formData[area.id].semanal}
+                                                        onChange={(e) => updateField(area.id, 'semanal', e.target.value)}
+                                                        placeholder="Llamadas, inversiones, decisiones difíciles..."
+                                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="flex justify-between mt-12">
+                                    <button onClick={prevStep} className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
+                                        <ChevronLeft className="w-5 h-5" /> Regresar
+                                    </button>
+                                    <button onClick={nextStep} className="px-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
+                                        Firmar Compromiso <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ===== STEP 5: COMPROMISO ===== */}
+                        {step === 5 && (
+                            <div className="w-full max-w-2xl bg-slate-900/50 border border-indigo-500/30 p-12 rounded-[2rem] shadow-2xl space-y-8 animate-zoomIn">
+                                <div className="text-center space-y-4">
+                                    <img src={LOGO_URL} alt="Logo" className="w-16 h-16 mx-auto rounded-xl shadow-lg" />
+                                    <PenTool className="w-12 h-12 text-indigo-400 mx-auto" />
+                                    <h2 className="text-3xl font-bold text-white">CONTRATO SAGRADO</h2>
+                                    <p className="text-slate-400">Compromiso de 90 días</p>
+                                </div>
+
+                                <div className="space-y-6 text-lg text-slate-300 leading-relaxed text-center">
+                                    <p>
+                                        "Durante los próximos 90 días me comprometo a pedir claro, actuar cada día y dejar de sabotearme con dudas."
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-800">
+                                    <div>
+                                        <label className="text-xs text-slate-500 font-bold uppercase mb-2 block text-center">Firma Consciente</label>
+                                        <input
+                                            type="text"
+                                            value={formData.firma}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, firma: e.target.value }))}
+                                            placeholder="Tu nombre completo"
+                                            className="w-full bg-transparent border-b-2 border-slate-700 py-4 text-center text-2xl font-serif text-indigo-300 focus:outline-none focus:border-indigo-500 transition-colors"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs text-slate-500 font-bold uppercase mb-2 block text-center">Fecha de Inicio</label>
+                                        <div className="text-center text-2xl text-slate-200 py-4 font-mono">
+                                            {formData.fecha}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={handlePrint}
+                                    className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg hover:bg-indigo-500 shadow-xl flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                >
+                                    <Printer className="w-5 h-5" /> Descargar mi Mapa Mágico
+                                </button>
+
+                                <p className="text-center text-xs text-slate-500 uppercase tracking-tighter">
+                                    Has activado tu proceso de manifestación. Confía.
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Progress Dots */}
+                        {step > 0 && step <= 5 && (
+                            <div className="mt-12 flex items-center gap-4 progress-dots">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                    <div
+                                        key={s}
+                                        className={`h-2 rounded-full transition-all duration-500 ${step >= s ? 'w-8 bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,1)]' : 'w-2 bg-slate-700'}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Print Summary (hidden on screen, shown on print) */}
+                    {PrintSummary}
                 </div>
             );
         };
@@ -363,4 +566,5 @@
         root.render(<App />);
     </script>
 </body>
+
 </html>
