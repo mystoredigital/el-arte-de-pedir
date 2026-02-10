@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx:alpine AS production
 
 # Copiar el archivo index.html al directorio predeterminado de Nginx
 COPY index.html /usr/share/nginx/html/index.html
